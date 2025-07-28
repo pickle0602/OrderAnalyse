@@ -1,8 +1,8 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "../include/csv_reader.h"
-#include "../include/distinct_counter.h"
+#include "csv_reader.h"
+#include "distinct_counter.h"
 
 int main(int argc, char** argv) {
 
