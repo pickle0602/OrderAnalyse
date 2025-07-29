@@ -1,15 +1,20 @@
-#include <string>
 #include <fstream>
 #include <iostream>
+#include <string>
+
 #include "csv_reader.h"
 #include "distinct_counter.h"
 
 int main(int argc, char** argv) {
-
+  std::cout << "Type file's name" << std::endl;
   std::string input_file;
-  // TODO: read input file from console
+  std::getline(std::cin, input_file);
+
   std::ifstream fin(input_file);
-  if (not fin.is_open()) return -1;
+  if (not fin.is_open()) {
+    std::cout << "File not found" << std::endl;
+    return -1;
+  }
 
   order_analyse::CsvReader reader(fin);
   order_analyse::Sheet sheet = reader.Read();
@@ -18,11 +23,11 @@ int main(int argc, char** argv) {
 
   std::vector<order_analyse::Order> orders;
 
-
   for (const auto& row : sheet.rows())
-    orders.emplace_back(order_analyse::Order::FromRow(sheet.header(), row));
+    orders.emplace_back(order_analyse::Order(sheet.headers(), row));
 
-  std::cout << counter.Calculate(orders) << std::endl;
-
-
+  std::cout << "Type header's name" << std::endl;
+  std::string header_name;
+  std::getline(std::cin, header_name);
+  std::cout << counter.Calculate(orders, header_name) << std::endl;
 }
