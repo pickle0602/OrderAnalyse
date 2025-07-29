@@ -1,4 +1,6 @@
 #pragma once
+#include <unordered_set>
+
 #include "calculator.h"
 #include "order.h"
 
@@ -8,28 +10,14 @@ class DistinctCounter : public Calculator {
  private:
  public:
   int Calculate(const std::vector<Order>& orders, const std::string& header) {
-    int counter = 0;
-    std::vector<std::string> contents;
-    bool flag;
-    for (auto order : orders) {
-      flag = false;
-      if (order.cell().count(header) == 1) {
-        flag = true;
-        for (auto content = contents.rbegin(); content != contents.rend();
-             ++content) {
-          if (order.cell()[header] == *content) {
-            flag = false;
-            break;
-          }
-        }
-      }
-
-      if (flag == true) {
-        contents.emplace_back(order.cell()[header]);
-        counter++;
-      }
+    std::unordered_set<std::string> contents;
+    if (orders.begin()->header().count(header) == 1) {
+      int code = orders.begin()->header()[header];
+      for (auto order_ptr = orders.begin(); order_ptr != orders.end();
+           order_ptr++)
+        contents.insert(order_ptr->cell()[code]);
     }
-    return counter;
+    return contents.size();
   }
 };
 
