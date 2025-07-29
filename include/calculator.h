@@ -6,7 +6,7 @@ namespace order_analyse {
 class Calculator {
  private:
  public:
-  virtual int Calculate(const std::vector<Order>& orders,
+  virtual int Calculate(const OrderList& order_list,
                         const std::string& header) = 0;
 };
 

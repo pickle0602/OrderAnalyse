@@ -5,6 +5,7 @@
 
 #include "csv_reader.h"
 #include "distinct_counter.h"
+#include "order_list.h"
 
 int main(int argc, char** argv) {
   std::cout << "Type file's name" << std::endl;
@@ -23,10 +24,8 @@ int main(int argc, char** argv) {
 
   order_analyse::DistinctCounter counter;
 
-  std::vector<order_analyse::Order> orders;  // 本质结构
+  order_analyse::OrderList order_list(sheet.rows(), sheet.headers());
 
-  for (const auto& row : sheet.rows())
-    orders.emplace_back(order_analyse::Order(sheet.headers(), row));
   auto end1 = std::chrono::high_resolution_clock::now();
   auto duration1 =
       std::chrono::duration_cast<std::chrono::microseconds>(end1 - start1);
@@ -36,7 +35,7 @@ int main(int argc, char** argv) {
   std::string header_name;
   std::getline(std::cin, header_name);
   auto start = std::chrono::high_resolution_clock::now();
-  std::cout << counter.Calculate(orders, header_name) << std::endl;  // 优化
+  std::cout << counter.Calculate(order_list, header_name) << std::endl;  // 优化
   auto end = std::chrono::high_resolution_clock::now();
   auto duration =
       std::chrono::duration_cast<std::chrono::microseconds>(end - start);

@@ -7,23 +7,10 @@ namespace order_analyse {
 
 class Order {
  private:
-  std::unordered_map<int, std::string> cells_;
-  std::unordered_map<std::string, int> headers_;
+  std::vector<std::string> cells_;
 
  public:
-  Order(const std::vector<std::string>& headers,
-        const std::vector<std::string>& row) {
-    auto row_ptr = row.begin();
-    int code = 0;
-    for (auto header : headers) {
-      headers_.emplace(header, code);
-      cells_.emplace(code, *row_ptr);
-      row_ptr++;
-      code++;
-    }
-  }
-  std::unordered_map<int, std::string> cell() const { return cells_; }
-  std::unordered_map<std::string, int> header() const { return headers_; }
+  Order(const std::vector<std::string>& row) { cells_ = row; }
+  const auto& cell() { return cells_; }
 };
-
 }  // namespace order_analyse

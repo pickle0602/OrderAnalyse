@@ -9,13 +9,11 @@ namespace order_analyse {
 class DistinctCounter : public Calculator {
  private:
  public:
-  int Calculate(const std::vector<Order>& orders, const std::string& header) {
+  int Calculate(const OrderList& order_list, const std::string& header) {
     std::unordered_set<std::string> contents;
     if (orders.begin()->header().count(header) == 1) {
       int code = orders.begin()->header()[header];
-      for (auto order_ptr = orders.begin(); order_ptr != orders.end();
-           order_ptr++)
-        contents.insert(order_ptr->cell()[code]);
+      for (const auto& order : orders) contents.insert(order.cell().at(code));
     }
     return contents.size();
   }
