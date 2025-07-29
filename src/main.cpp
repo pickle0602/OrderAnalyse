@@ -8,11 +8,13 @@
 int main(int argc, char** argv) {
   std::cout << "Type file's name" << std::endl;
   std::string input_file;
-  // std::cin >> input_file;
-  input_file = "datacharonly.csv";  // testing，need remove.
+  std::getline(std::cin, input_file);
 
   std::ifstream fin(input_file);
-  if (not fin.is_open()) return -1;
+  if (not fin.is_open()) {
+    std::cout << "File not found" << std::endl;
+    return -1;
+  }
 
   order_analyse::CsvReader reader(fin);
   order_analyse::Sheet sheet = reader.Read();
@@ -26,6 +28,6 @@ int main(int argc, char** argv) {
 
   std::cout << "Type header's name" << std::endl;
   std::string header_name;
-  std::cin >> header_name;
+  std::getline(std::cin, header_name);
   std::cout << counter.Calculate(orders, header_name) << std::endl;
 }

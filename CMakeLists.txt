@@ -9,4 +9,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SRCS
   src/main.cpp
 )
+
 add_executable(${PROJECT_NAME} ${SRCS})
