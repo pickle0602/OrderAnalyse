@@ -1,86 +1,64 @@
 #pragma once
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <set>
 #include <string>
-#include <vector>
 
 #include "order_list.h"
 
-
 namespace order_analyse {
 
-class MatchingCounter {
-  struct set_package_ {
-    std::string main;
-    std::set<std::string> sub1;
-    std::set<std::string> sub2;
-  };
-
+class MatchingCounter : public Calculator {
  private:
-  std::vector<set_package_> set_packages_;
+  std::map<std::string, std::map<std::string, std::set<std::string>>> set_map_;
   std::string main_header_;
-  std::string sub1_header_;
-  std::string sub2_header_;
+  std::vector<std::string> sub_headers_;
 
  public:
-  MatchingCounter(const OrderList& order_list, const std::string& main_name,
-                  const std::string& sub1_name, const std::string& sub2_name) {
-    int main_index = 0;
-    int sub1_index = 0;
-    int sub2_index = 0;
-    int temp_index = 0;
-    main_header_ = main_name;
-    sub1_header_ = sub1_name;
-    sub2_header_ = sub2_name;
-    for (const auto& header : order_list.header()) {
-      if (header == main_header_) main_index = temp_index;
-      if (header == sub1_header_) sub1_index = temp_index;
-      if (header == sub2_header_) sub2_index = temp_index;
-      temp_index++;
-    }
-    bool flag;
-    for (const auto& order : order_list.orders()) {
-      flag = false;
-      for (auto package = set_packages_.rbegin();
-           package != set_packages_.rend(); package++) {
-        if (package->main == order.cell()[main_index]) {
-          flag = true;
-          package->sub1.insert(order.cell()[sub1_index]);
-          package->sub2.insert(order.cell()[sub2_index]);
-          break;
-        }
-      }
-      if (flag == false) {
-        set_package_ temp_package;
-        temp_package.main = order.cell()[main_index];
-        temp_package.sub1.insert(order.cell()[sub1_index]);
-        temp_package.sub2.insert(order.cell()[sub2_index]);
-        set_packages_.emplace_back(temp_package);
-      }
-    }
+  MatchingCounter(const std::string& main_name) { main_header_ = main_name; }
+  int Calculate(const OrderList& order_list, const std::string& sub_name) {
+    sub_headers_.emplace_back(sub_name);
+    size_t main_index = order_list.index(main_header_);
+    size_t sub_index = order_list.index(sub_name);
+    for (const auto& order : order_list.orders())
+      set_map_[order.cell()[main_index]][sub_name].insert(
+          order.cell()[sub_index]);
   }
-  void out_put_test() {
-    std::cout << main_header_ << "," << sub1_header_ << "," << sub2_header_
-              << std::endl;
-    for (const auto& package : set_packages_) {
-      std::cout << package.main << "," << package.sub1.size() << ","
-                << package.sub2.size() << std::endl;
+  bool OutPut(std::string file_name = "") {
+    auto cout_buf = std::cout.rdbuf();
+    std::ofstream OutFile(file_name);
+    if (file_name != "") {
+      if (!OutFile) {
+        std::cerr << "Open Failed！" << std::endl;
+        return false;
+      }
+      std::cout.rdbuf(OutFile.rdbuf());
     }
+    std::cout << main_header_;
+    for (const auto& header : sub_headers_) {
+      std::cout << "," << header;
+    }
+    std::cout << std::endl;
+    for (const auto& map : set_map_) {
+      std::cout << map.first;
+      for (const auto& header : sub_headers_)
+        std::cout << "," << map.second.at(header).size();
+      std::cout << std::endl;
+    }
+    std::cout.rdbuf(cout_buf);
+    return true;
   }
-  bool out_put() {
-    std::ofstream out_put_file("OutPut.csv");
-    if (!out_put_file.is_open()) {
-      std::cerr << "Opening Failed" << std::endl;
-      return false;
+  bool compare(std::string header1, std::string header2) {
+    bool correct = true;
+    for (const auto& map : set_map_) {
+      if (map.second.at(header1).size() < map.second.at(header2).size()) {
+        std::cout << map.first << ":" << map.second.at(header1).size() << ","
+                  << map.second.at(header2).size() << std::endl;
+        correct = false;
+      }
     }
-
-    out_put_file << main_header_ << "," << sub1_header_ << "," << sub2_header_
-                 << std::endl;
-    for (const auto& package : set_packages_) {
-      out_put_file << package.main << "," << package.sub1.size() << ","
-                   << package.sub2.size() << std::endl;
-    }
+    return correct;
   }
 };
 

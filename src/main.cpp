@@ -37,11 +37,14 @@ int main(int argc, char** argv) {
   std::getline(std::cin, sub2);
 
   auto start = std::chrono::high_resolution_clock::now();
-  order_analyse::MatchingCounter counter(order_list, main, sub1,
-                                         sub2);  // 优化
+  order_analyse::MatchingCounter counter(main);
+  counter.Calculate(order_list, sub1);  // 优化
+  counter.Calculate(order_list, sub2);
   auto end = std::chrono::high_resolution_clock::now();
   auto duration =
       std::chrono::duration_cast<std::chrono::microseconds>(end - start);
   std::cout << duration.count() << std::endl;
-  counter.out_put();
+  counter.compare(sub1, sub2);
+  counter.OutPut();
+  counter.compare(sub1, sub2);
 }

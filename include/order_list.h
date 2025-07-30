@@ -21,6 +21,14 @@ class OrderList {
       orders_.emplace_back(Order(row));
     }
   }
+  size_t index(std::string header) const {
+    size_t index = 0;
+    for (const auto& temp_header : headers_) {
+      if (temp_header == header) return index;
+      index++;
+    }
+    return -1;
+  }
   const auto& header() const { return headers_; }
   const auto& orders() const { return orders_; }
 };
