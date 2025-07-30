@@ -1,10 +1,12 @@
 #pragma once
+#include <fstream>
 #include <iostream>
 #include <set>
 #include <string>
 #include <vector>
 
 #include "order_list.h"
+
 
 namespace order_analyse {
 
@@ -64,6 +66,20 @@ class MatchingCounter {
     for (const auto& package : set_packages_) {
       std::cout << package.main << "," << package.sub1.size() << ","
                 << package.sub2.size() << std::endl;
+    }
+  }
+  bool out_put() {
+    std::ofstream out_put_file("OutPut.csv");
+    if (!out_put_file.is_open()) {
+      std::cerr << "Opening Failed" << std::endl;
+      return false;
+    }
+
+    out_put_file << main_header_ << "," << sub1_header_ << "," << sub2_header_
+                 << std::endl;
+    for (const auto& package : set_packages_) {
+      out_put_file << package.main << "," << package.sub1.size() << ","
+                   << package.sub2.size() << std::endl;
     }
   }
 };
