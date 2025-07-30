@@ -11,6 +11,6 @@ class Order {
 
  public:
   Order(const std::vector<std::string>& row) { cells_ = row; }
-  const auto& cell() { return cells_; }
+  const auto& cell() const { return cells_; }
 };
 }  // namespace order_analyse

@@ -1,5 +1,4 @@
 #pragma once
-#include <set>
 
 #include "calculator.h"
 #include "order.h"
@@ -22,8 +21,8 @@ class OrderList {
       orders_.emplace_back(Order(row));
     }
   }
-  const auto& header() { return headers_; }
-  const auto& orders() { return orders_; }
+  const auto& header() const { return headers_; }
+  const auto& orders() const { return orders_; }
 };
 
 }  // namespace order_analyse
