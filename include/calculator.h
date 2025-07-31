@@ -1,13 +1,13 @@
 #pragma once
-#include "order.h"
+#include "order_list.h"
 
 namespace order_analyse {
 
 class Calculator {
  private:
  public:
-  virtual int Calculate(const std::vector<Order>& orders,
-                        const std::string& header) = 0;
+  virtual std::map<std::string, int> Calculate(
+      const OrderList& order_list, const std::vector<std::string> headers) = 0;
 };
 
 }  // namespace order_analyse

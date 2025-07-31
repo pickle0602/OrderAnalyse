@@ -1,35 +1,25 @@
 #pragma once
+#include <map>
+#include <set>
+
 #include "calculator.h"
-#include "order.h"
+#include "order_list.h"
 
 namespace order_analyse {
 
 class DistinctCounter : public Calculator {
  private:
  public:
-  int Calculate(const std::vector<Order>& orders, const std::string& header) {
-    int counter = 0;
-    std::vector<std::string> contents;
-    bool flag;
-    for (auto order : orders) {
-      flag = false;
-      if (order.cell().count(header) == 1) {
-        flag = true;
-        for (auto content = contents.rbegin(); content != contents.rend();
-             ++content) {
-          if (order.cell()[header] == *content) {
-            flag = false;
-            break;
-          }
-        }
-      }
-
-      if (flag == true) {
-        contents.emplace_back(order.cell()[header]);
-        counter++;
-      }
+  std::map<std::string, int> Calculate(const OrderList& order_list,
+                                       const std::vector<std::string> headers) {
+    std::set<std::string> contents;
+    int index = order_list.index(headers[0]);
+    for (const auto& order : order_list.orders()) {
+      contents.insert(order.cell().at(index));
     }
-    return counter;
+    std::map<std::string, int> map;
+    map[headers[0]] = contents.size();
+    return map;
   }
 };
 
