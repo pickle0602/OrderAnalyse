@@ -12,21 +12,8 @@ jobs:
 
     - name: Configure & Build
       run: |
-        cmake -B build -G "Visual Studio 17 2022" -A x64
+        cmake -B build -G "MinGW Makefiles" -A x64
         cmake --build build --config Release
-        make
-    - name: Run Tests
-      run: |
-        ./OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M) "Batch_ID(O)" "output.csv"
-  Ubuntu_test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Configure & Build
-      run: |
-        cmake .
         make
     - name: Run Tests
       run: |
