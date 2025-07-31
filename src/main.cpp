@@ -38,8 +38,12 @@ int main(int argc, char** argv) {
   auto start = std::chrono::high_resolution_clock::now();
   order_analyse::MatchingCounter counter;
   order_analyse::ResultData result_data(main);
-  result_data.insert(sub1, counter.Calculate(order_list, main, sub1));
-  result_data.insert(sub2, counter.Calculate(order_list, main, sub2));
+  result_data.insert(
+      sub1,
+      counter.Calculate(order_list, std::vector<std::string>{main, sub1}));
+  result_data.insert(
+      sub2,
+      counter.Calculate(order_list, std::vector<std::string>{main, sub2}));
   auto end = std::chrono::high_resolution_clock::now();
   auto duration =
       std::chrono::duration_cast<std::chrono::microseconds>(end - start);

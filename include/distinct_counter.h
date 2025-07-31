@@ -11,15 +11,14 @@ class DistinctCounter : public Calculator {
  private:
  public:
   std::map<std::string, int> Calculate(const OrderList& order_list,
-                                       const std::string& header,
-                                       const std::string& place_holder = "") {
+                                       const std::vector<std::string> headers) {
     std::set<std::string> contents;
-    int index = order_list.index(header);
+    int index = order_list.index(headers[0]);
     for (const auto& order : order_list.orders()) {
       contents.insert(order.cell().at(index));
     }
     std::map<std::string, int> map;
-    map[header] = contents.size();
+    map[headers[0]] = contents.size();
     return map;
   }
 };
