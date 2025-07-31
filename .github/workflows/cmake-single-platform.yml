@@ -12,7 +12,7 @@ jobs:
 
     - name: Configure & Build
       run: |
-        cmake -B build -G "Make Makefiles" 
+        cmake -B build -G "MinGW Makefiles" 
         cmake --build build
         make
     - name: Run Tests
