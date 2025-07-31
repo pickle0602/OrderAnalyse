@@ -12,10 +12,9 @@ class MatchingCounter : public Calculator {
  private:
  public:
   std::map<std::string, int> Calculate(const OrderList& order_list,
-                                       const std::string& main_name,
-                                       const std::string& sub_name) {
-    size_t main_index = order_list.index(main_name);
-    size_t sub_index = order_list.index(sub_name);
+                                       const std::vector<std::string> headers) {
+    size_t main_index = order_list.index(headers[0]);
+    size_t sub_index = order_list.index(headers[1]);
     std::map<std::string, std::set<std::string>> main2set;
     for (const auto& order : order_list.orders())
       main2set[order.cell()[main_index]].insert(order.cell()[sub_index]);
