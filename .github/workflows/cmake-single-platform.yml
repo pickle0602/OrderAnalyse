@@ -17,7 +17,7 @@ jobs:
         
     - name: Run Tests
       run: |
-        $output = ./OrderAnalyse.exe "test/test.csv" "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" "output.csv"
+        $output = ./build\OrderAnalyse.exe "test/test.csv" "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" 
         Write-Output $output
         if ($output -like "*Bin_Location(M),Order_ID(M),Batch_ID(O)$'\n'1A01-03-01,1,1$'\n'1A02-03-02,1,1$'\n'1A02-03-05,1,2$'\n'1A03-01-01,5,2$'\n'1A02-03-05:1,2*") {
         Write-Output "::set-output name=status::success"
