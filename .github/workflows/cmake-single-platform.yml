@@ -12,20 +12,8 @@ jobs:
 
     - name: Configure & Build
       run: |
-        cmake
-        make
-    - name: Run Tests
-      run: |
-        ./OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M) "Batch_ID(O)" "output.csv"
-  Ubuntu_test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Configure & Build
-      run: |
-        cmake
+        cmake -B build -G "MinGW Makefiles" 
+        cmake --build build
         make
     - name: Run Tests
       run: |
