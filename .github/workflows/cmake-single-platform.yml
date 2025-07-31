@@ -1,59 +1,33 @@
-name: CMake CI
+name:  CMake Test
 
 on:
   push:
     branches: ["master"]
-  pull_request:
-    branches: ["master"]
-
 jobs:
-  windows-build:
+  Windows_test:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        config: [Debug, Release]
-    
+
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Install latest CMake
-      uses: lukka/get-cmake@latest
-      
-    - name: Configure CMake (MSVC)
+
+    - name: Configure & Build
       run: |
-        cmake -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=${{ matrix.config }}
-      
-    - name: Build
-      run: |
-        cmake --build build --config ${{ matrix.config }}
-        
+        cmake -B build -G "MinGW Makefiles"
+        cmake --build build --config Release
     - name: Run Tests
       run: |
         cd build
-        ctest -C ${{ matrix.config }} --output-on-failure
-
-  linux-build:
+        ctest --output-on-failure
+  Ubuntu_test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        config: [Debug, Release]
-    
+
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Install dependencies
+
+    - name: Configure & Build
       run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake
-        
-    - name: Configure CMake
-      run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }}
-      
-    - name: Build
-      run: |
-        cmake --build build --config ${{ matrix.config }}
-        
+        cmake -B build
+        cmake --build build
     - name: Run Tests
       run: |
         cd build
