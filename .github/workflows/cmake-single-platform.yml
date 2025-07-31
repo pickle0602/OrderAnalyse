@@ -12,7 +12,7 @@ jobs:
 
     - name: Configure & Build
       run: |
-        cmake .
+        MSBuild
         make
     - name: Run Tests
       run: |
