@@ -17,4 +17,4 @@ jobs:
         make
     - name: Run Tests
       run: |
-        ./OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" "output.csv"
+        ./build/OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" "output.csv"
