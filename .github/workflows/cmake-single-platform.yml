@@ -16,4 +16,4 @@ jobs:
         cmake --build build
     - name: Run Tests
       run: |
-        ./OrderAnalyse/OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" "output.csv"
+        ./OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" "output.csv"
