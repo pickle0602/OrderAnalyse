@@ -7,7 +7,7 @@ class Calculator {
  private:
  public:
   virtual int Calculate(const OrderList& order_list,
-                        const std::string& header) = 0;
+                        const std::string& header) {};
 };
 
 }  // namespace order_analyse
