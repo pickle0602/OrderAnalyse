@@ -8,14 +8,14 @@
 
 namespace order_analyse {
 
-class ProcessData {
+class ResultData {
  private:
   std::map<std::string, std::map<std::string, int>> main2sub2size;
   std::string main_header_;
   std::vector<std::string> sub_headers_;
 
  public:
-  ProcessData(const std::string& main_name) { main_header_ = main_name; }
+  ResultData(const std::string& main_name) { main_header_ = main_name; }
   std::string main_header() { return main_header_; }
   void insert(const std::string& sub_header,
               const std::map<std::string, int>& main2size) {

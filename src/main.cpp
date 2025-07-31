@@ -7,7 +7,7 @@
 #include "distinct_counter.h"
 #include "matching_counter.h"
 #include "order_list.h"
-#include "process_data.h"
+#include "result_data.h"
 
 int main(int argc, char** argv) {
   std::string input_file;
@@ -32,26 +32,24 @@ int main(int argc, char** argv) {
   std::string main = argv[2];
   std::string sub1 = argv[3];
   std::string sub2 = argv[4];
+  std::string file_name = "";
+  if (argc == 6) file_name = argv[5];
 
   auto start = std::chrono::high_resolution_clock::now();
   order_analyse::MatchingCounter counter;
-  order_analyse::ProcessData process_data(main);
-  process_data.insert(sub1, counter.Calculate(order_list, main, sub1));
-  process_data.insert(sub2, counter.Calculate(order_list, main, sub2));
+  order_analyse::ResultData result_data(main);
+  result_data.insert(sub1, counter.Calculate(order_list, main, sub1));
+  result_data.insert(sub2, counter.Calculate(order_list, main, sub2));
   auto end = std::chrono::high_resolution_clock::now();
   auto duration =
       std::chrono::duration_cast<std::chrono::microseconds>(end - start);
   std::cout << duration.count() << std::endl;
 
   auto cout_buf = std::cout.rdbuf();
-  std::ofstream OutFile("OutPut.csv");
-  if (!OutFile) {
-    std::cerr << "Open Failed！" << std::endl;
-    return 1;
-  }
-  std::cout.rdbuf(OutFile.rdbuf());
-  process_data.OutPut(OutFile);
+  std::ofstream OutFile(file_name);
+  if (file_name != "") std::cout.rdbuf(OutFile.rdbuf());
+  result_data.OutPut(std::cout);
   std::cout.rdbuf(cout_buf);
 
-  process_data.compare(sub1, sub2);
+  result_data.compare(sub1, sub2);
 }

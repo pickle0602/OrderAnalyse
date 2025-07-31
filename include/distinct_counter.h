@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include <set>
 
 #include "calculator.h"
@@ -9,13 +10,17 @@ namespace order_analyse {
 class DistinctCounter : public Calculator {
  private:
  public:
-  int Calculate(const OrderList& order_list, const std::string& header) {
+  std::map<std::string, int> Calculate(const OrderList& order_list,
+                                       const std::string& header,
+                                       const std::string& place_holder = "") {
     std::set<std::string> contents;
     int index = order_list.index(header);
     for (const auto& order : order_list.orders()) {
       contents.insert(order.cell().at(index));
     }
-    return contents.size();
+    std::map<std::string, int> map;
+    map[header] = contents.size();
+    return map;
   }
 };
 
