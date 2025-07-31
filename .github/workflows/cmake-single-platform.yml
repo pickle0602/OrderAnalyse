@@ -35,8 +35,9 @@ jobs:
     - name: Check if output.csv exists
       id: check_output
       run: |
-        if (-not -f "output.csv" )
+        if (-not (-f "output.csv") ) {
         exit 1
+        }
       
     - name: Fail if no output
       if: steps.check_output.outputs.file_exists == 'false'
