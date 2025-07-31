@@ -14,7 +14,6 @@ jobs:
       run: |
         cmake -B build -G "MinGW Makefiles" 
         cmake --build build
-        make
     - name: Run Tests
       run: |
         ./OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M) "Batch_ID(O)" "output.csv"
