@@ -35,12 +35,8 @@ jobs:
     - name: Check if output.csv exists
       id: check_output
       run: |
-        if [ -f "output.csv" ]; then
-        echo "::set-output name=file_exists::true"
-        else
-        echo "::set-output name=file_exists::false"
+        if (-not -f "output.csv" )
         exit 1
-        fi
       
     - name: Fail if no output
       if: steps.check_output.outputs.file_exists == 'false'
