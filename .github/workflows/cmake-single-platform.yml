@@ -12,14 +12,11 @@ jobs:
 
     - name: Configure & Build
       run: |
-        cmake -B build -G "Visual Studio 17 2022"
-        cmake --build build --config Release
-
+        cmake
+        make
     - name: Run Tests
       run: |
-        cd build
-        ctest --output-on-failure
-
+        ./OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M) "Batch_ID(O)" "output.csv"
   Ubuntu_test:
     runs-on: ubuntu-latest
 
@@ -28,10 +25,8 @@ jobs:
 
     - name: Configure & Build
       run: |
-        cmake -B build
-        cmake --build build
-
+        cmake
+        make
     - name: Run Tests
       run: |
-        cd build
-        ctest --output-on-failure
+        ./OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M) "Batch_ID(O)" "output.csv"
