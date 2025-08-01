@@ -13,4 +13,4 @@ set(SRCS
 )
 
 add_executable(${PROJECT_NAME} ${SRCS})
-add_executable(test src/test.cpp)
+add_executable(test test/test.cpp)
