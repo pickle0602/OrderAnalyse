@@ -18,7 +18,13 @@ class CsvReader {
     std::string str;
     std::getline(file_, str);
     sheet.SetHeader(SplitRow(str));
-    while (std::getline(file_, str)) sheet.SetRow(SplitRow(str));
+    while (std::getline(file_, str))
+      if (!sheet.SetRow(SplitRow(str))) {
+        Sheet bad_sheet;
+        bad_sheet.SetHeader(std::vector<std::string>{"Error:Bad Sheet!"});
+        bad_sheet.SetRow(std::vector<std::string>{"Error:Bad Sheet!"});
+        return bad_sheet;
+      }
     return sheet;
   }
   std::vector<std::string> SplitRow(const std::string& str_row) {
