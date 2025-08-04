@@ -4,6 +4,7 @@
 
 #include "csv_reader.h"
 #include "distinct_counter.h"
+#include "gtest/gtest.h"
 #include "matching_counter.h"
 #include "order_list.h"
 #include "result_data.h"
