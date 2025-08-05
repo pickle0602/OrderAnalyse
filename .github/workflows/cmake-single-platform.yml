@@ -1,41 +1,53 @@
-name:  CMake Test
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: ["master"]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
-  Windows_test:
-    runs-on: windows-latest
-
+  build-and-test:
+    runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    - name: Configure & Build
+    - name: Install dependencies
       run: |
-        cmake -B build -G "MinGW Makefiles" 
-        cmake --build build
-        
-    - name: Run Tests
-      run: |
-        $output = ./build\OrderAnalyse.exe "test/test.csv" "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" 
-        Write-Output $output
-        if (-not($output -match "Bin_Location\(M\),Order_ID\(M\),Batch_ID\(O\)" -and 
-        $output -match "1A01-03-01,1,1" -and 
-        $output -match "1A02-03-02,1,1" -and 
-        $output -match "1A02-03-05,1,2" -and 
-        $output -match "1A03-01-01,5,2" -and 
-        $output -match "1A02-03-05:1,2")) {
-        exit 1
-        }
-        
-    - name: Run Tests (out_put_file)
-      run: |
-        ./build\OrderAnalyse.exe "test\test.csv" "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" "output.csv"
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake lcov libgtest-dev
 
-    - name: Check if output.csv exists
-      id: check_output
-      shell: pwsh
+    - name: Build GTest (Ubuntu needs manual build)
       run: |
-        if (-not (Test-Path "output.csv")) {
-          exit 1
-          }
+        cd /usr/src/gtest
+        sudo cmake CMakeLists.txt
+        sudo make
+        sudo cp *.a /usr/lib
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+
+    - name: Build project
+      run: |
+        cmake --build build --config Debug
+
+    - name: Run tests
+      working-directory: ./build
+      run: |
+        ctest --output-on-failure
+
+    - name: Generate coverage report
+      run: |
+        lcov --capture --directory ./build --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' '*/tests/*' --output-file filtered.info
+        genhtml filtered.info --output-directory coverage-report
+        echo "Coverage report generated at coverage-report/index.html"
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: ./coverage-report
