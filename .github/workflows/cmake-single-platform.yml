@@ -12,18 +12,12 @@ jobs:
     - name: Install dependencies (Linux)
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake lcov libgtest-dev
-
-    - name: Build GTest
-      run: |
-        cd /usr/src/gtest
-        sudo cmake CMakeLists.txt
-        sudo make
-        sudo cp *.a /usr/lib
-
+        sudo apt-get install -y build-essential cmake lcov libgtest-dev googletest
+        
     - name: Configure CMake
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage" \
+          -DCMAKE_PREFIX_PATH="/usr"
 
     - name: Build project
       run: |
@@ -39,7 +33,6 @@ jobs:
         lcov --capture --directory ./build --output-file coverage.info
         lcov --remove coverage.info '/usr/*' '*/tests/*' --output-file filtered.info
         genhtml filtered.info --output-directory coverage-report
-        echo "Coverage report generated at coverage-report/index.html"
 
     - name: Upload coverage report
       uses: actions/upload-artifact@v3
@@ -53,7 +46,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install MSYS2 and dependencies
+    - name: Setup MSYS2
       uses: msys2/setup-msys2@v2
       with:
         update: true
@@ -61,12 +54,15 @@ jobs:
           mingw-w64-x86_64-toolchain
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-gtest
-          lcov
+          mingw-w64-x86_64-lcov
 
     - name: Configure CMake (Windows)
       shell: msys2 {0}
       run: |
-        cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+        cmake -B build -G "MinGW Makefiles" \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage" \
+          -DCMAKE_PREFIX_PATH="C:/msys64/mingw64"
 
     - name: Build project (Windows)
       shell: msys2 {0}
@@ -82,10 +78,9 @@ jobs:
     - name: Generate coverage report (Windows)
       shell: msys2 {0}
       run: |
-        lcov --capture --directory ./build --output-file coverage.info
+        lcov --capture --directory . --output-file coverage.info
         lcov --remove coverage.info '*/msys64/*' '*/tests/*' --output-file filtered.info
         genhtml filtered.info --output-directory coverage-report
-        echo "Coverage report generated at coverage-report/index.html"
 
     - name: Upload coverage report (Windows)
       uses: actions/upload-artifact@v3
