@@ -1,0 +1,1 @@
+./OrderAnalyse.exe data.csv "Bin_Location(M)" "Order_ID(M)" "Batch_ID(O)" "output.csv"

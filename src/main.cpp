@@ -32,6 +32,11 @@ int main(int argc, char** argv) {
   std::string main = argv[2];
   std::string sub1 = argv[3];
   std::string sub2 = argv[4];
+  if (argc == 1) {
+    std::getline(std::cin, main);
+    std::getline(std::cin, sub1);
+    std::getline(std::cin, sub2);
+  }
   std::string file_name = "";
   if (argc == 6) file_name = argv[5];
 

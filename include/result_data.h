@@ -32,7 +32,7 @@ class ResultData {
     for (const auto& map : main2sub2size) {
       stream << map.first;
       for (const auto& header : sub_headers_)
-        stream << "," << map.second.at(header);
+        stream << "," << map.second.find(header)->second;
       stream << std::endl;
     }
 
@@ -41,9 +41,9 @@ class ResultData {
   bool compare(std::string header1, std::string header2) {
     bool correct = true;
     for (const auto& map : main2sub2size) {
-      if (map.second.at(header1) < map.second.at(header2)) {
-        std::cout << map.first << ":" << map.second.at(header1) << ","
-                  << map.second.at(header2) << std::endl;
+      if (map.second.find(header1)->second < map.second.find(header2)->second) {
+        std::cout << map.first << ":" << map.second.find(header1)->second << ","
+                  << map.second.find(header2)->second << std::endl;
         correct = false;
       }
     }

@@ -11,7 +11,11 @@ class Sheet {
 
  public:
   void SetHeader(const std::vector<std::string>& header) { headers_ = header; }
-  void SetRow(const std::vector<std::string>& row) { rows_.emplace_back(row); }
+  bool SetRow(const std::vector<std::string>& row) {
+    if (row.size() != headers_.size()) return false;
+    rows_.emplace_back(row);
+    return true;
+  }
   const std::vector<std::string>& headers() { return headers_; }
   const std::vector<std::vector<std::string>>& rows() { return rows_; }
 };
