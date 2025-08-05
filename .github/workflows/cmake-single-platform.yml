@@ -15,8 +15,6 @@ jobs:
 
     - name: Build and Test
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug \
-              -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage"
         cmake --build build
         cd build && ctest --output-on-failure
 
@@ -32,10 +30,6 @@ jobs:
         genhtml filtered.info --output-directory coverage \
              --ignore-errors unmapped,unused \
              --title "Linux Coverage Report"
-        
-        # 同时生成 gcovr 报告作为备选
-        gcovr --exclude-unreachable-branches --exclude-throw-branches \
-              --html-details coverage/gcovr_report.html
 
     - uses: actions/upload-artifact@v4
       with:
@@ -64,14 +58,12 @@ jobs:
       shell: msys2 {0}
       run: |
         cmake -B build -G "MinGW Makefiles" \
-          -DCMAKE_BUILD_TYPE=Debug \
-          -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage" \
           -DCMAKE_PREFIX_PATH="C:/msys64/mingw64"
 
     - name: Build project (Windows)
       shell: msys2 {0}
       run: |
-        cmake --build build --config Debug
+        cmake --build build
 
     - name: Run tests (Windows)
       shell: msys2 {0}
