@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # 也建议升级到最新版
 
     - name: Install dependencies (Linux)
       run: |
@@ -35,7 +35,7 @@ jobs:
         genhtml filtered.info --output-directory coverage-report
 
     - name: Upload coverage report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: linux-coverage-report
         path: ./coverage-report
@@ -44,7 +44,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup MSYS2
       uses: msys2/setup-msys2@v2
@@ -83,7 +83,7 @@ jobs:
         genhtml filtered.info --output-directory coverage-report
 
     - name: Upload coverage report (Windows)
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: windows-coverage-report
         path: ./coverage-report
