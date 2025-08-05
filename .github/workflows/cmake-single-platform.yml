@@ -1,89 +1,67 @@
-name: Cross-Platform CI
+name: CI Pipeline
 
 on: [push]
 
 jobs:
-  linux-build:
+  linux:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4  # 也建议升级到最新版
+    - uses: actions/checkout@v4
 
-    - name: Install dependencies (Linux)
+    - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake lcov libgtest-dev googletest
-        
-    - name: Configure CMake
-      run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage" \
-          -DCMAKE_PREFIX_PATH="/usr"
+        sudo apt-get install -y cmake lcov libgtest-dev
 
-    - name: Build project
+    - name: Build and Test
       run: |
-        cmake --build build --config Debug
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+        cmake --build build
+        cd build && ctest --output-on-failure
 
-    - name: Run tests
-      working-directory: ./build
+    - name: Generate Coverage
       run: |
-        ctest --output-on-failure
-
-    - name: Generate coverage report
-      run: |
-        lcov --capture --directory ./build --output-file coverage.info
+        lcov --capture --directory build --output-file coverage.info \
+             --ignore-errors mismatch \
+             --rc geninfo_unexecuted_blocks=1
         lcov --remove coverage.info '/usr/*' '*/tests/*' --output-file filtered.info
-        genhtml filtered.info --output-directory coverage-report
+        genhtml filtered.info --output-directory coverage
 
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v4
       with:
-        name: linux-coverage-report
-        path: ./coverage-report
+        name: linux-coverage
+        path: coverage
 
-  windows-build:
+  windows:
     runs-on: windows-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Setup MSYS2
       uses: msys2/setup-msys2@v2
       with:
-        update: true
-        install: >-
+        install: |
           mingw-w64-x86_64-toolchain
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-gtest
-          mingw-w64-x86_64-lcov
 
-    - name: Configure CMake (Windows)
+    - name: Build and Test
       shell: msys2 {0}
       run: |
         cmake -B build -G "MinGW Makefiles" \
-          -DCMAKE_BUILD_TYPE=Debug \
-          -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage" \
-          -DCMAKE_PREFIX_PATH="C:/msys64/mingw64"
+              -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage"
+        cmake --build build
+        cd build && ctest --output-on-failure
 
-    - name: Build project (Windows)
+    - name: Generate Coverage
       shell: msys2 {0}
       run: |
-        cmake --build build --config Debug
-
-    - name: Run tests (Windows)
-      shell: msys2 {0}
-      working-directory: ./build
-      run: |
-        ctest --output-on-failure
-
-    - name: Generate coverage report (Windows)
-      shell: msys2 {0}
-      run: |
-        lcov --capture --directory . --output-file coverage.info
+        lcov --capture --directory build --output-file coverage.info \
+             --ignore-errors mismatch
         lcov --remove coverage.info '*/msys64/*' '*/tests/*' --output-file filtered.info
-        genhtml filtered.info --output-directory coverage-report
+        genhtml filtered.info --output-directory coverage
 
-    - name: Upload coverage report (Windows)
-      uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v4
       with:
-        name: windows-coverage-report
-        path: ./coverage-report
+        name: windows-coverage
+        path: coverage
