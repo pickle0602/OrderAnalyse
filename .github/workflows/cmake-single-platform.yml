@@ -1,53 +1,87 @@
-name: CI/CD Pipeline
+name: CI Pipeline
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
-  build-and-test:
+  linux:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake lcov libgtest-dev
+        sudo apt-get install -y cmake lcov gcovr libgtest-dev
 
-    - name: Build GTest (Ubuntu needs manual build)
+    - name: Build and Test
       run: |
-        cd /usr/src/gtest
-        sudo cmake CMakeLists.txt
-        sudo make
-        sudo cp *.a /usr/lib
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug \
+              -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage"
+        cmake --build build
+        cd build && ctest --output-on-failure
 
-    - name: Configure CMake
+    - name: Generate Coverage
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+        lcov --capture --directory build --output-file coverage.info \
+             --ignore-errors mismatch,unused \
+             --rc geninfo_unexecuted_blocks=1
+        lcov --remove coverage.info \
+             '/usr/*' '*/tests/*' '*/gtest/*' '*/include/c++/*' \
+             --output-file filtered.info \
+             --ignore-errors unused
+        genhtml filtered.info --output-directory coverage \
+             --ignore-errors unmapped,unused \
+             --title "Linux Coverage Report"
 
-    - name: Build project
+    - uses: actions/upload-artifact@v4
+      with:
+        name: linux-coverage
+        path: |
+          coverage
+          build/CMakeFiles/*.gcov
+
+  windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: >-
+          mingw-w64-x86_64-toolchain
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-gtest
+          mingw-w64-x86_64-lcov
+
+    - name: Configure CMake (Windows)
+      shell: msys2 {0}
       run: |
-        cmake --build build --config Debug
+        cmake -B build -G "MinGW Makefiles" \
+          -DCMAKE_PREFIX_PATH="C:/msys64/mingw64"
 
-    - name: Run tests
+    - name: Build project (Windows)
+      shell: msys2 {0}
+      run: |
+        cmake --build build
+
+    - name: Run tests (Windows)
+      shell: msys2 {0}
       working-directory: ./build
       run: |
         ctest --output-on-failure
 
-    - name: Generate coverage report
+    - name: Generate coverage report (Windows)
+      shell: msys2 {0}
       run: |
-        lcov --capture --directory ./build --output-file coverage.info
-        lcov --remove coverage.info '/usr/*' '*/tests/*' --output-file filtered.info
+        lcov --capture --directory . --output-file coverage.info
+        lcov --remove coverage.info '*/msys64/*' '*/tests/*' --output-file filtered.info
         genhtml filtered.info --output-directory coverage-report
-        echo "Coverage report generated at coverage-report/index.html"
 
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v3
+    - name: Upload coverage report (Windows)
+      uses: actions/upload-artifact@v4
       with:
-        name: coverage-report
+        name: windows-coverage-report
         path: ./coverage-report
