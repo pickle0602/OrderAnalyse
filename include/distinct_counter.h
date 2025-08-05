@@ -20,7 +20,7 @@ class DistinctCounter : public Calculator {
     std::set<std::string> contents;
     int index = order_list.index(headers[0]);
     for (const auto& order : order_list.orders()) {
-      contents.insert(order.cell().at(index));
+      contents.insert(order.cell()[index]);
     }
     std::map<std::string, int> map;
     map[headers[0]] = contents.size();

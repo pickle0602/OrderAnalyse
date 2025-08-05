@@ -47,7 +47,7 @@ TEST(WrongArguments, MatchingCounter) {
       counter.Calculate(order_list, std::vector<std::string>{"Bin_Location(M)",
                                                              "Order_ID(M)"}));
   result_data.insert(
-      "Order_ID(M)",
+      "Batch_ID(O)",
       counter.Calculate(order_list, std::vector<std::string>{"Bin_Location(M)",
                                                              "Batch_ID(O)"}));
 
