@@ -44,49 +44,50 @@ jobs:
           coverage
           build/CMakeFiles/*.gcov
 
-  windows:
+   windows-build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Setup MSYS2
       uses: msys2/setup-msys2@v2
       with:
-        install: |
+        update: true
+        install: >-
           mingw-w64-x86_64-toolchain
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-gtest
-          mingw-w64-x86_64-python-gcovr
+          mingw-w64-x86_64-lcov
 
-    - name: Build and Test
+    - name: Configure CMake (Windows)
       shell: msys2 {0}
       run: |
         cmake -B build -G "MinGW Makefiles" \
-              -DCMAKE_BUILD_TYPE=Debug \
-              -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage"
-        cmake --build build
-        cd build && ctest --output-on-failure
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage" \
+          -DCMAKE_PREFIX_PATH="C:/msys64/mingw64"
 
-    - name: Generate Coverage
+    - name: Build project (Windows)
       shell: msys2 {0}
       run: |
-        lcov --capture --directory build --output-file coverage.info \
-             --ignore-errors mismatch,unused
-        lcov --remove coverage.info \
-             '*/msys64/*' '*/tests/*' '*/gtest/*' \
-             --output-file filtered.info \
-             --ignore-errors unused
-        genhtml filtered.info --output-directory coverage \
-             --ignore-errors unmapped,unused \
-             --title "Windows Coverage Report"
-        
-        # 使用 gcovr 作为备选方案
-        gcovr --exclude-unreachable-branches --exclude-throw-branches \
-              --html-details coverage/gcovr_report.html
+        cmake --build build --config Debug
 
-    - uses: actions/upload-artifact@v4
+    - name: Run tests (Windows)
+      shell: msys2 {0}
+      working-directory: ./build
+      run: |
+        ctest --output-on-failure
+
+    - name: Generate coverage report (Windows)
+      shell: msys2 {0}
+      run: |
+        lcov --capture --directory . --output-file coverage.info
+        lcov --remove coverage.info '*/msys64/*' '*/tests/*' --output-file filtered.info
+        genhtml filtered.info --output-directory coverage-report
+
+    - name: Upload coverage report (Windows)
+      uses: actions/upload-artifact@v4
       with:
-        name: windows-coverage
-        path: |
-          coverage
-          build/CMakeFiles/*.gcov
+        name: windows-coverage-report
+        path: ./coverage-report
