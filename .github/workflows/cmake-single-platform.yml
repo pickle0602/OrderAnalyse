@@ -1,25 +1,20 @@
-name: CI/CD Pipeline
+name: Cross-Platform CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
-  build-and-test:
+  linux-build:
     runs-on: ubuntu-latest
-    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install dependencies
+    - name: Install dependencies (Linux)
       run: |
         sudo apt-get update
         sudo apt-get install -y build-essential cmake lcov libgtest-dev
 
-    - name: Build GTest (Ubuntu needs manual build)
+    - name: Build GTest
       run: |
         cd /usr/src/gtest
         sudo cmake CMakeLists.txt
@@ -49,5 +44,51 @@ jobs:
     - name: Upload coverage report
       uses: actions/upload-artifact@v3
       with:
-        name: coverage-report
+        name: linux-coverage-report
+        path: ./coverage-report
+
+  windows-build:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install MSYS2 and dependencies
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: >-
+          mingw-w64-x86_64-toolchain
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-gtest
+          lcov
+
+    - name: Configure CMake (Windows)
+      shell: msys2 {0}
+      run: |
+        cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+
+    - name: Build project (Windows)
+      shell: msys2 {0}
+      run: |
+        cmake --build build --config Debug
+
+    - name: Run tests (Windows)
+      shell: msys2 {0}
+      working-directory: ./build
+      run: |
+        ctest --output-on-failure
+
+    - name: Generate coverage report (Windows)
+      shell: msys2 {0}
+      run: |
+        lcov --capture --directory ./build --output-file coverage.info
+        lcov --remove coverage.info '*/msys64/*' '*/tests/*' --output-file filtered.info
+        genhtml filtered.info --output-directory coverage-report
+        echo "Coverage report generated at coverage-report/index.html"
+
+    - name: Upload coverage report (Windows)
+      uses: actions/upload-artifact@v3
+      with:
+        name: windows-coverage-report
         path: ./coverage-report
