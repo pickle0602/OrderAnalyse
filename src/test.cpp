@@ -11,14 +11,14 @@
 #include "result_data.h"
 
 TEST(BadSheet, CSVReader) {
-  std::ifstream fin("test1.csv");
+  std::ifstream fin("../test/test1.csv");
   order_analyse::CsvReader reader(fin);
   order_analyse::Sheet sheet = reader.Read();
   EXPECT_EQ(sheet.headers()[0], "Error:Bad Sheet!");
 }
 
 TEST(WrongArguments, DistinctCounter) {
-  std::ifstream fin("test2.csv");
+  std::ifstream fin("../test/test2.csv");
   order_analyse::CsvReader reader(fin);
   order_analyse::Sheet sheet = reader.Read();
   order_analyse::DistinctCounter counter;
@@ -29,7 +29,7 @@ TEST(WrongArguments, DistinctCounter) {
 }
 
 TEST(WrongArguments, MatchingCounter) {
-  std::ifstream fin("test2.csv");
+  std::ifstream fin("../test/test2.csv");
   order_analyse::CsvReader reader(fin);
   order_analyse::Sheet sheet = reader.Read();
   order_analyse::MatchingCounter counter;
