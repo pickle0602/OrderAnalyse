@@ -26,6 +26,10 @@ TEST(WrongArguments, DistinctCounter) {
   EXPECT_EQ(counter.Calculate(order_list,
                               std::vector<std::string>{"1", "2", "3"})["Error"],
             -1);
+  EXPECT_EQ(counter.Calculate(
+                order_list,
+                std::vector<std::string>{"Bin_Location(M)"})["Bin_Location(M)"],
+            4);
 }
 
 TEST(WrongArguments, MatchingCounter) {
@@ -37,6 +41,17 @@ TEST(WrongArguments, MatchingCounter) {
   EXPECT_EQ(counter.Calculate(order_list,
                               std::vector<std::string>{"1", "2", "3"})["Error"],
             -1);
+  order_analyse::ResultData result_data("Bin_Location(M)");
+  result_data.insert(
+      "Order_ID(M)",
+      counter.Calculate(order_list, std::vector<std::string>{"Bin_Location(M)",
+                                                             "Order_ID(M)"}));
+  result_data.insert(
+      "Order_ID(M)",
+      counter.Calculate(order_list, std::vector<std::string>{"Bin_Location(M)",
+                                                             "Batch_ID(O)"}));
+
+  EXPECT_FALSE(result_data.compare("Order_ID(M)", "Batch_ID(O)"));
 }
 
 int main(int argc, char** argv) {
