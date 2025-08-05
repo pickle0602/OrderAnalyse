@@ -44,7 +44,7 @@ jobs:
           coverage
           build/CMakeFiles/*.gcov
 
-   windows-build:
+  windows:
     runs-on: windows-latest
     steps:
     - name: Checkout code
