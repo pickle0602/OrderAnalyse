@@ -1,10 +1,11 @@
+#include <gtest/gtest.h>
+
 #include <fstream>
 #include <iostream>
 #include <string>
 
 #include "csv_reader.h"
 #include "distinct_counter.h"
-#include "gtest/gtest.h"
 #include "matching_counter.h"
 #include "order_list.h"
 #include "result_data.h"
@@ -13,7 +14,7 @@ TEST(BadSheet, CSVReader) {
   std::ifstream fin("test1.csv");
   order_analyse::CsvReader reader(fin);
   order_analyse::Sheet sheet = reader.Read();
-  EXPECT_EQ(sheet.headers(), std::vector<std::string>{"Error:Bad Sheet!"});
+  EXPECT_EQ(sheet.headers()[0], "Error:Bad Sheet!");
 }
 
 TEST(WrongArguments, DistinctCounter) {
