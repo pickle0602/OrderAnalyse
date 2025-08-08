@@ -16,6 +16,7 @@ class Sheet {
     rows_.emplace_back(row);
     return true;
   }
+<<<<<<< HEAD
   const std::vector<std::string>& headers() const { return headers_; }
   const std::vector<std::vector<std::string>>& rows() const { return rows_; }
   size_t index(const std::string& header) const {
@@ -26,6 +27,10 @@ class Sheet {
     }
     return -1;
   }
+=======
+  const std::vector<std::string>& headers() { return headers_; }
+  const std::vector<std::vector<std::string>>& rows() { return rows_; }
+>>>>>>> origin/new-master
 };
 
 }  // namespace order_analyse
