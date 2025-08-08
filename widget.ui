@@ -6,105 +6,164 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>933</width>
+    <width>1054</width>
     <height>731</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Widget</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLineEdit" name="lineEdit">
-           <property name="text">
-            <string>data.csv</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="open">
-           <property name="text">
-            <string>open</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLineEdit" name="headers">
-           <property name="text">
-            <string>Bin_Location(M),Order_ID(M),Batch_ID(O)</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QPushButton" name="count">
-           <property name="text">
-            <string>count</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="matching_count">
-           <property name="text">
-            <string>matching count</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLineEdit" name="left">
-         <property name="text">
-          <string>Order_ID(M)</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>&lt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="right">
-         <property name="text">
-          <string>Batch_ID(O)</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="flite">
-         <property name="text">
-          <string>flite</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="table_widget"/>
-     </item>
-    </layout>
-   </item>
-  </layout>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>260</y>
+     <width>360</width>
+     <height>193</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="text">
+         <string>data.csv</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="open">
+        <property name="text">
+         <string>open</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLineEdit" name="headers">
+          <property name="text">
+           <string>Bin_Location(M),Order_ID(M),Batch_ID(O)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="count">
+            <property name="text">
+             <string>count</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="matching_count">
+            <property name="text">
+             <string>matching count</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="left">
+            <property name="text">
+             <string>Order_ID(M)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>&lt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="right">
+            <property name="text">
+             <string>Batch_ID(O)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="flite">
+            <property name="text">
+             <string>flite</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="table_widget"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="IK">
+            <property name="text">
+             <string>IK</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="IQ">
+            <property name="text">
+             <string>IQ</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="EN">
+            <property name="text">
+             <string>EN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="EQ">
+            <property name="text">
+             <string>EQ</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="ENhist">
+            <property name="text">
+             <string>EN-hist</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="EQhist">
+            <property name="text">
+             <string>EQ-hist</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QGraphicsView" name="bar_chart"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>

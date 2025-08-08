@@ -3,7 +3,11 @@
 
 #include <QWidget>
 #include <QProcess>
+#include <QtCharts>
 #include"sheet.h"
+
+// QT_CHARTS_USE_NAMESPACE
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class Widget;
@@ -27,9 +31,19 @@ private slots:
 
     void on_flite_clicked();
 
+    void on_ENhist_clicked();
+
+    void on_EN_clicked();
+
+
 private:
     Ui::Widget *ui;
-    void show_sheet();
     order_analyse::Sheet *sheet=NULL;
+    order_analyse::Sheet *showing_sheet=NULL;
+
+    bool file_check();
+    void show_chart();
+    void show_sheet();
+
 };
 #endif // WIDGET_H

@@ -54,6 +54,15 @@ target_link_libraries(OrderAnalyse-GUI PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
+
+find_package(Qt6 COMPONENTS Core Widgets Charts REQUIRED)
+
+target_link_libraries(OrderAnalyse-GUI PRIVATE
+    Qt6::Core
+    Qt6::Widgets
+    Qt6::Charts
+)
+
 if(${QT_VERSION} VERSION_LESS 6.1.0)
   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.OrderAnalyse-GUI)
 endif()
