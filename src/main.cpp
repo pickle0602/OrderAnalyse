@@ -18,7 +18,6 @@ int main(int argc, char** argv) {
     return -1;
   }
   auto start1 = std::chrono::high_resolution_clock::now();
-
   order_analyse::CsvReader reader(fin);
   order_analyse::Sheet sheet = reader.Read();
 
