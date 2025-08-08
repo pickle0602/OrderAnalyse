@@ -1,13 +1,14 @@
 #pragma once
-#include "order_list.h"
+#include "sheet.h"
 
 namespace order_analyse {
 
 class Calculator {
  private:
  public:
-  virtual std::map<std::string, int> Calculate(
-      const OrderList& order_list, const std::vector<std::string> headers) = 0;
+  virtual Sheet Calculate(const Sheet& sheet,
+                          const std::vector<std::string>& headers) = 0;
+  virtual bool ArgumentsLimiter(int vec_size) = 0;
 };
 
 }  // namespace order_analyse
