@@ -2,17 +2,13 @@ cmake_minimum_required(VERSION 3.16)
 
 project(OrderAnalyse-GUI VERSION 0.1 LANGUAGES CXX)
 
-<<<<<<< HEAD
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-=======
->>>>>>> origin/new-master
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-<<<<<<< HEAD
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
@@ -89,22 +85,3 @@ install(TARGETS OrderAnalyse-GUI
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(OrderAnalyse-GUI)
 endif()
-=======
-set(SRCS
-  src/main.cpp
-)
-
-
-find_package(GTest REQUIRED)
-find_package(Threads REQUIRED)
-
-add_executable(${PROJECT_NAME} ${SRCS})
-add_executable(run_tests src/test.cpp)
-
-target_compile_options(run_tests PRIVATE -pthread -fprofile-arcs -ftest-coverage -O0)
-target_link_libraries(run_tests PRIVATE gcov Threads::Threads)
-target_link_libraries(run_tests PRIVATE GTest::GTest GTest::Main)
-
-enable_testing()
-add_test(NAME CompletelyTest COMMAND run_tests)
->>>>>>> origin/new-master
