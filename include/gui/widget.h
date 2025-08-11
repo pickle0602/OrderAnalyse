@@ -29,12 +29,20 @@ private slots:
 
     void on_matching_count_clicked();
 
-    void on_flite_clicked();
+    void on_filte_clicked();
 
     void on_ENhist_clicked();
 
     void on_EN_clicked();
 
+
+    void on_EQ_clicked();
+
+    void on_EQhist_clicked();
+
+    void on_IK_clicked();
+
+    void on_IQ_clicked();
 
 private:
     Ui::Widget *ui;
@@ -42,7 +50,7 @@ private:
     order_analyse::Sheet *showing_sheet=NULL;
 
     bool file_check();
-    void show_chart();
+    void show_chart(std::string title,std::string bar_name,const std::vector<int>& values);
     void show_sheet();
 
 };

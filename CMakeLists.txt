@@ -15,12 +15,13 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 set(TS_FILES OrderAnalyse-GUI_zh_CN.ts)
 
 set(PROJECT_SOURCES
-        main.cpp
-        widget.cpp
-        widget.h
-        widget.ui
+        src/main.cpp
+        src/widget.cpp
+	include/gui/widget.h
+	src/widget.ui
         ${TS_FILES}
 )
+
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(OrderAnalyse-GUI
@@ -75,7 +76,7 @@ set_target_properties(OrderAnalyse-GUI PROPERTIES
 )
 
 include(GNUInstallDirs)
-include_directories(include)
+include_directories(include/order_analyse include/gui)
 install(TARGETS OrderAnalyse-GUI
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <map>
 #include <set>
 #include <string>
@@ -61,7 +60,8 @@ class MatchingCounter : public Calculator {
   }
 
   bool ArgumentsLimiter(int vec_size) { return vec_size < 2; }
-  bool str2int(std::string str, int& num) {
+
+  bool stoi_no_exception(std::string str, int& num) {
     try {
       int n = std::stoi(str);
       num = n;
@@ -70,7 +70,8 @@ class MatchingCounter : public Calculator {
       return false;
     }
   }
-  Sheet Fliter_LT(const Sheet& sheet, const std::string& main,
+
+  Sheet Filter_LT(const Sheet& sheet, const std::string& main,
                   const std::string& header1, const std::string& header2) {
     int m_index = sheet.index(main);
     int h1_index = sheet.index(header1);
@@ -81,7 +82,8 @@ class MatchingCounter : public Calculator {
     result.SetHeader(std::vector<std::string>{main, header1, header2});
     for (const auto& row : sheet.rows()) {
       if (m_index == -1 || h1_index == -1 || h2_index == -1 ||
-          !str2int(row[h1_index], h1) || !str2int(row[h2_index], h2)) {
+          !stoi_no_exception(row[h1_index], h1) ||
+          !stoi_no_exception(row[h2_index], h2)) {
         Sheet bad_sheet;
         bad_sheet.SetHeader(std::vector<std::string>{"Error:Bad_Sheet!"});
         bad_sheet.SetRow(std::vector<std::string>{"Error:Bad_Sheet!"});
