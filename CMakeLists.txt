@@ -16,9 +16,12 @@ set(TS_FILES OrderAnalyse-GUI_zh_CN.ts)
 
 set(PROJECT_SOURCES
         src/main.cpp
-        src/widget.cpp
-	include/gui/widget.h
-	src/widget.ui
+        src/main_widget.cpp
+        include/gui/main_widget.h
+        src/main_widget.ui
+        src/chart_widget.cpp
+        src/chart_widget.ui
+        include/gui/chart_widget.h
         ${TS_FILES}
 )
 
@@ -27,7 +30,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(OrderAnalyse-GUI
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        src/matching_counter_widget.cpp
+        src/filter_widget.cpp
+        include/gui/matching_counter_widget.h
+        include/gui/filter_widget.h
+        src/matching_counter_widget.ui
+        src/filter_widget.ui
     )
+
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET OrderAnalyse-GUI APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
