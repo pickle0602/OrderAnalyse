@@ -16,8 +16,16 @@ class Sheet {
     rows_.emplace_back(row);
     return true;
   }
-  const std::vector<std::string>& headers() { return headers_; }
-  const std::vector<std::vector<std::string>>& rows() { return rows_; }
+  const std::vector<std::string>& headers() const { return headers_; }
+  const std::vector<std::vector<std::string>>& rows() const { return rows_; }
+  size_t index(const std::string& header) const {
+    size_t index = 0;
+    for (const auto& temp_header : headers_) {
+      if (temp_header == header) return index;
+      index++;
+    }
+    return -1;
+  }
 };
 
 }  // namespace order_analyse
