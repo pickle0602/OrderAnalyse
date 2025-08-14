@@ -40,4 +40,9 @@
 # debug information files
 *.dwo
 
-build/
+build/*
+.vscode/*
+.qtcreator/*
+*.user
+CMakeLists.txt.user
+include/.qtcreator/project.json
