@@ -95,7 +95,6 @@ class MatchingCounter : public Calculator {
     }
     return result;
   }
-  bool arguments_limiter(int vec_size) { return vec_size != 2; }
 };
 
 }  // namespace order_analyse
