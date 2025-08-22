@@ -14,14 +14,24 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 set(TS_FILES OrderAnalyse-GUI_zh_CN.ts)
 
-set(PROJECT_SOURCES
-        src/main.cpp
+set(PROJECT_SOURCES_GUI
+        src/main_gui.cpp
         src/main_widget.cpp
         include/gui/main_widget.h
         src/main_widget.ui
         src/chart_widget.cpp
         src/chart_widget.ui
         include/gui/chart_widget.h
+        src/matching_counter_widget.cpp
+        src/filter_widget.cpp
+        include/gui/matching_counter_widget.h
+        include/gui/filter_widget.h
+        src/matching_counter_widget.ui
+        src/filter_widget.ui
+        ${TS_FILES}
+)
+set(PROJECT_SOURCES_CLI
+        src/main_cli.cpp
         ${TS_FILES}
 )
 
@@ -29,14 +39,13 @@ set(PROJECT_SOURCES
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(OrderAnalyse-GUI
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        src/matching_counter_widget.cpp
-        src/filter_widget.cpp
-        include/gui/matching_counter_widget.h
-        include/gui/filter_widget.h
-        src/matching_counter_widget.ui
-        src/filter_widget.ui
+        ${PROJECT_SOURCES_GUI}
     )
+    qt_add_executable(OrderAnalyse-CLI
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES_CLI}
+    )
+
 
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET OrderAnalyse-GUI APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -47,13 +56,16 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 else()
     if(ANDROID)
         add_library(OrderAnalyse-GUI SHARED
-            ${PROJECT_SOURCES}
+            ${PROJECT_SOURCES_GUI}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(OrderAnalyse-GUI
-            ${PROJECT_SOURCES}
+            ${PROJECT_SOURCES_GUI}
+        )
+        add_executable(OrderAnalyse-CLI
+            ${PROJECT_SOURCES_CLI}
         )
     endif()
 
