@@ -2,12 +2,14 @@ cmake_minimum_required(VERSION 3.16)
 
 project(OrderAnalyse-GUI VERSION 0.1 LANGUAGES CXX)
 
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(ortools_ROOT "/path/to/your/eigen3")
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
@@ -67,6 +69,7 @@ else()
         add_executable(OrderAnalyse-CLI
             ${PROJECT_SOURCES_CLI}
         )
+
     endif()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
@@ -97,8 +100,11 @@ set_target_properties(OrderAnalyse-GUI PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+find_package(ortools  REQUIRED)
+target_link_libraries(OrderAnalyse-CLI PRIVATE ortools::ortools)
+
 include(GNUInstallDirs)
-include_directories(include/order_analyse include/gui)
+include_directories(include/gui include/order_analyse)
 install(TARGETS OrderAnalyse-GUI
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -108,3 +114,4 @@ install(TARGETS OrderAnalyse-GUI
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(OrderAnalyse-GUI)
 endif()
+

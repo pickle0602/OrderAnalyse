@@ -21,10 +21,14 @@ class Batch {
       std::list<std::pair<std::string, std::set<std::string>>>::iterator const&
           it) {
     if (orders_.size() >= num_) return false;
-    if (!std::includes(skus_.begin(), skus_.end(), it->second.begin(),
-                       it->second.end()))
-      for (auto const& item : it->second) skus_.insert(item);
+    for (auto const& item : it->second) skus_.insert(item);
     orders_.emplace_back(*it);
+    return true;
+  }
+  bool insert(std::pair<std::string, std::set<std::string>> const& order) {
+    if (orders_.size() >= num_) return false;
+    for (auto const& item : order.second) skus_.insert(item);
+    orders_.emplace_back(order);
     return true;
   }
   std::list<std::pair<std::string, std::set<std::string>>> const& orders()
